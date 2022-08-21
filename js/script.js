@@ -127,10 +127,46 @@ function validateEmail(el){
 
 // Activity Validation
 function validateActivity(el){
+    const hint = document.querySelector('#activities-hint.hint');
     if(totalActivity > 0){
-        activities.className = 'activities-box activities.valid valid';
+        activities.className = 'activities-box valid';
+        hint.style.display = 'none';
     } else {
-        activities.className = 'activities-box error-border activities.not-valid not-valid';
+        activities.className = 'activities-box not-valid error-border';
+        hint.style.display = 'block';
+    }
+}
+
+// Credit Card Validation
+function validateCreditCard(el){
+    if(el.value == 'credit-card'){
+        const cardNumber = document.querySelector('#cc-num');
+        const cardHint = document.querySelector('#cc-hint.hint');
+        const zip = document.querySelector('#zip');
+        const zipHint = document.querySelector('#zip-hint.hint');
+        const cvv = document.querySelector('#cvv');
+        const cvvHint = document.querySelector('#cvv-hint.hint');
+        if(cardNumber.value.length < 13 || cardNumber.value.length > 16){
+            cardHint.style.display = 'block';
+            cardNumber.parentNode.className = 'not-valid error-border';
+        } else {
+            cardHint.style.display = 'none';
+            cardNumber.parentNode.className = 'valid';
+        }
+        if(zip.value.length != 5){
+            zipHint.style.display = 'block';
+            zip.parentNode.className = 'not-valid error-border';
+        } else {
+            zipHint.style.display = 'none';
+            zip.parentNode.className = 'valid';
+        }
+        if(cvv.value.length != 3){
+            cvvHint.style.display = 'block';
+            cvv.parentNode.className = 'not-valid error-border';
+        } else {
+            cvvHint.style.display = 'none';
+            cvv.parentNode.className = 'valid';
+        }
     }
 }
 
@@ -140,4 +176,5 @@ form.addEventListener('submit',(e)=>{
     validateName(name);
     validateEmail(email);
     validateActivity(activities);
+    validateCreditCard(paymentMethod);
 })
