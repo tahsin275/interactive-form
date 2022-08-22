@@ -20,6 +20,7 @@ window.addEventListener('load',()=>{
     name.focus();
     otherRole.style.display = 'none';
     tshirtColor.classList.add('disabled');
+    tshirtColor.setAttribute('disabled','disabled');
     paypal.style.display = 'none';
     bitcoin.style.display = 'none';
     const payments = paymentMethod.children;
@@ -37,6 +38,7 @@ role.addEventListener('change',()=>{
 // Selecting T-Shirt design (filtering color based on the t-shirt type)
 tshirtDesign.addEventListener('change',() => {
     tshirtColor.classList.remove('disabled');
+    tshirtColor.removeAttribute('disabled');
     // 
     const options = tshirtColor.children;
     for (let i = 0; i < options.length; i++){
@@ -55,17 +57,31 @@ let totalActivity = 0;
 activities.addEventListener('click', (e)=> {
     e.stopPropagation();
     if(e.target.tagName == 'INPUT'){
+        const eventTime = e.target.getAttribute('data-day-and-time');
+        const activity = activities.querySelectorAll('input')
+
         if(e.target.checked){
-            totalCost += parseInt(e.target.getAttribute('data-cost'));
-            activityCost.innerHTML = `Total: $${totalCost}`;
-            // console.log(totalCost);
-            totalActivity++;
-        } else {
-            totalCost -= parseInt(e.target.getAttribute('data-cost'));
-            activityCost.innerHTML = `Total: $${totalCost}`;
-            // console.log(totalCost);
-            totalActivity--;
-        }
+                totalCost += parseInt(e.target.getAttribute('data-cost'));
+                activityCost.innerHTML = `Total: $${totalCost}`;                totalActivity++;
+                for (let i = 0; i < activity.length; i++){
+                    if(eventTime == activity[i].getAttribute('data-day-and-time') && e.target != activity[i]){
+                        activity[i].parentNode.setAttribute('class','disabled');
+                        activity[i].setAttribute('disabled','disabled');
+                    }
+                }
+            } else{
+                totalCost -= parseInt(e.target.getAttribute('data-cost'));
+                activityCost.innerHTML = `Total: $${totalCost}`;
+                totalActivity--;
+                for (let i = 0; i < activity.length; i++){
+                    if(eventTime == activity[i].getAttribute('data-day-and-time')){
+                        activity[i].parentNode.removeAttribute('class');
+                        activity[i].removeAttribute('disabled');
+                    }
+                }
+                console.log(e.target);
+                console.log(activity);
+                }
     }
 })
 
@@ -143,10 +159,10 @@ function validateEmail(el){
 function validateActivity(el){
     const hint = document.querySelector('#activities-hint.hint');
     if(totalActivity > 0){
-        activities.className = 'activities-box valid';
+        activities.parentNode.className = 'activities valid';
         hint.style.display = 'none';
     } else {
-        activities.className = 'activities-box not-valid error-border';
+        activities.parentNode.className = 'activities not-valid error-border';
         hint.style.display = 'block';
     }
 }
