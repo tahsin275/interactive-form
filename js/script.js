@@ -8,6 +8,7 @@ const tshirtSize = document.querySelector('#size');
 const tshirtDesign = document.querySelector('#design');
 const tshirtColor = document.querySelector('#color');
 const activities = document.querySelector('#activities-box');
+const activityInp = activities.querySelectorAll('input');
 const activityCost = document.querySelector('#activities-cost');
 const paymentMethod = document.querySelector('#payment');
 const creditCard = document.querySelector('#credit-card');
@@ -57,16 +58,29 @@ activities.addEventListener('click', (e)=> {
         if(e.target.checked){
             totalCost += parseInt(e.target.getAttribute('data-cost'));
             activityCost.innerHTML = `Total: $${totalCost}`;
-            console.log(totalCost);
+            // console.log(totalCost);
             totalActivity++;
         } else {
             totalCost -= parseInt(e.target.getAttribute('data-cost'));
             activityCost.innerHTML = `Total: $${totalCost}`;
-            console.log(totalCost);
+            // console.log(totalCost);
             totalActivity--;
         }
     }
 })
+
+// Focus Event for Activity
+for (let i = 0; i< activityInp.length; i++){
+    activityInp[i].addEventListener('focus',(e)=>{
+        e.target.parentElement.classList.add('focus');
+        // console.log(e.target);
+    })
+    activityInp[i].addEventListener('blur',(e)=>{
+        e.target.parentElement.classList.remove('focus');
+        // console.log(e.target);
+    })
+}
+  
 
 // Selecting payment method (one payment method at a time)
 paymentMethod.addEventListener('change',(e)=>{
